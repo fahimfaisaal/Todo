@@ -1,9 +1,10 @@
 import getCurrentDate from "./getCurrentDate";
 import shortid from "shortid";
 
-const createList = () => {
+const createList = (listColor = 'transparent') => {
     const newList = {
         id: shortid.generate(),
+        listColor,
         todos: [],
         createdAt: getCurrentDate(),
         editedAt: null,
