@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import './App.css'
-import logo from './logo.svg'
+import { useState } from 'react';
+import './App.css';
+import logo from './logo.svg';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [count, setCount] = useState(0);
 
   return (
     <div className="App">
@@ -11,12 +11,18 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React!</p>
         <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
+          <button type="button" onClick={() => setCount((countNumber) => countNumber + 1)}>
+            count is:
+            {' '}
+            {count}
           </button>
         </p>
-        <p className='underline'>
-          Edit <code>App.jsx</code> and save to test HMR updates.
+        <p className="underline">
+          Edit
+          {' '}
+          <code>App.jsx</code>
+          {' '}
+          and save to test HMR updates.
         </p>
         <p>
           <a
@@ -39,7 +45,7 @@ function App() {
         </p>
       </header>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
