@@ -1,23 +1,23 @@
-import shortid from "shortid";
-import getCurrentDate from "./getCurrentDate";
+import shortid from 'shortid';
+import getCurrentDate from './getCurrentDate';
 
 /**
  * Create a new Todo
- * @param {string} title 
- * @param {string} description 
+ * @param {string} title
+ * @param {string} description
  * @returns {object}
  */
 const createTodo = (title, description) => {
-    const newTodo = {
-        id: shortid.generate(),
-        title,
-        description,
-        isCompleted: false,
-        createdAt: getCurrentDate(),
-        editedAt: null
-    }
+  const newTodo = {
+    id: shortid.generate(),
+    title,
+    description,
+    isCompleted: false,
+    createdAt: getCurrentDate(),
+    editedAt: null,
+  };
 
-    return newTodo;
-}
+  return newTodo;
+};
 
 export default createTodo;

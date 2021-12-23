@@ -1,11 +1,11 @@
 const getCurrentDate = () => {
-    const date = new Date();
-    const CurrentDate = {
-        date: date.toDateString(),
-        time: date.toLocaleTimeString()
-    }
+  const date = new Date();
+  const CurrentDate = {
+    date: date.toDateString(),
+    time: date.toLocaleTimeString(),
+  };
 
-    return CurrentDate;
-}
+  return CurrentDate;
+};
 
 export default getCurrentDate;
