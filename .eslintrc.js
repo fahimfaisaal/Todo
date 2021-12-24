@@ -16,5 +16,8 @@ module.exports = {
     'no-console': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/function-component-definition': 'off',
+    'no-unused-expressions': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'react/require-default-props': 'off',
   },
 };
