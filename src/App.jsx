@@ -1,51 +1,14 @@
-import { useState } from 'react';
-import './App.css';
-import logo from './logo.svg';
+import Heading from './components/atoms/Heading';
+import ThemeChanger from './components/ThemeChanger';
+import ViewBox from './components/ViewBox';
 
-const App = () => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((countNumber) => countNumber + 1)}>
-            count is:
-            {' '}
-            {count}
-          </button>
-        </p>
-        <p className="underline">
-          Edit
-          {' '}
-          <code>App.jsx</code>
-          {' '}
-          and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+const App = () => (
+  <main className="dark:bg-gray-900 bg-gray-100 h-screen">
+    <div className="container">
+      <ThemeChanger />
+      <Heading text="Todo" />
+      <ViewBox subHeading="My day" />
     </div>
-  );
-};
-
+  </main>
+);
 export default App;
