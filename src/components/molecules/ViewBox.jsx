@@ -11,7 +11,7 @@ export default function ViewBox({ subHeading }) {
   const status = `${completedItemsLength}/${todos.length}`;
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto px-7 sm:px-3 md:px-0">
       <ViewBoxHeader subHeading={subHeading} status={status} />
       <ItemsViewer items={todos} dispatch={dispatch} />
     </div>

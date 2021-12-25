@@ -1,5 +1,5 @@
 import propTypes from 'prop-types';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import enterKey from '../../assets/icon/enter-key';
 import Input from '../atoms/Input';
 
