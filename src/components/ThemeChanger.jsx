@@ -16,11 +16,21 @@ export default function ThemeChanger() {
   };
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+
+    if (typeof savedTheme === 'string') {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  useEffect(() => {
     const root = document.getElementById('root');
 
     theme === 'light'
       ? root.classList.remove('dark')
       : root.classList.add('dark');
+
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   return (
