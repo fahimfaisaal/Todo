@@ -3,16 +3,15 @@ import getCurrentDate from './getCurrentDate';
 
 /**
  * Create a new Todo
- * @param {string} title
+ * @param {string} text
  * @param {string} description
  * @returns {object}
  */
-const createTodo = (title, description) => {
+const createTodo = (text) => {
   const newTodo = {
     id: shortid.generate(),
-    title,
-    description,
-    isCompleted: false,
+    text,
+    isComplete: false,
     createdAt: getCurrentDate(),
     editedAt: null,
   };
