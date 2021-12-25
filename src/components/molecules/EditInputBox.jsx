@@ -1,16 +1,16 @@
 import propTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import enterKey from '../../assets/icon/enter-key';
 import Input from '../atoms/Input';
 
 export default function EditInputBox({
-  text, id, editTodoHandler,
+  text, editTodoHandler,
 }) {
   const [editValue, setEditValue] = useState(text);
+  const editedNodeRef = useRef(null);
 
   useEffect(() => {
-    const editNode = document.getElementById(id);
-    editNode.focus();
+    editedNodeRef.current.focus();
   }, []);
 
   const onChangeHandler = (e) => setEditValue(e.target.value);
@@ -30,7 +30,7 @@ export default function EditInputBox({
   return (
     <>
       <Input
-        id={id}
+        ref={editedNodeRef}
         classes="item-input"
         placeholder="add your day"
         value={editValue}
@@ -45,6 +45,5 @@ export default function EditInputBox({
 
 EditInputBox.propTypes = {
   text: propTypes.string.isRequired,
-  id: propTypes.string.isRequired,
   editTodoHandler: propTypes.func.isRequired,
 };

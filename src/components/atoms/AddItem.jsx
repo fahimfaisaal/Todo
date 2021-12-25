@@ -1,8 +1,6 @@
 import propTypes from 'prop-types';
 
 export default function AddIcon({ addText }) {
-  // Todo: add h-32 dynamic replace in add-icon class
-
   return (
     <div className="add-icon h-80">
       <svg className="cursor-pointer" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">

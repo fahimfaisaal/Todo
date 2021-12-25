@@ -1,12 +1,13 @@
 import propTypes from 'prop-types';
+import { forwardRef } from 'react';
 
-export default function Input({
-  classes, id, type = 'text', placeholder = null, value = null, handler = null, keyPressHandler = null,
-}) {
+function Input({
+  classes, type = 'text', placeholder = null, value = null, handler = null, keyPressHandler = null,
+}, inputRef) {
   return (
     <input
-      id={id}
-      className={classes}
+      ref={inputRef}
+      className={classes || ''}
       type={type}
       placeholder={placeholder}
       value={value}
@@ -16,12 +17,12 @@ export default function Input({
   );
 }
 
+export default forwardRef(Input);
 Input.propTypes = {
-  id: propTypes.string,
   classes: propTypes.string.isRequired,
   type: propTypes.string,
   placeholder: propTypes.string,
-  value: propTypes.string,
-  handler: propTypes.func,
+  value: propTypes.string.isRequired,
+  handler: propTypes.func.isRequired,
   keyPressHandler: propTypes.func,
 };

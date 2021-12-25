@@ -1,6 +1,5 @@
 import propTypes from 'prop-types';
 import { useContext, useState } from 'react';
-import shortid from 'shortid';
 import circle from '../../assets/icon/circle';
 import completeCircle from '../../assets/icon/circle-complete';
 import deleteIcon from '../../assets/icon/delete';
@@ -48,12 +47,14 @@ export default function Item({ todo }) {
 
   return (
     <ItemLayout>
-      <i
-        className="cursor-pointer"
-        onClick={toggleDoneTodoHandler}
-      >
-        {isComplete ? completeCircle : circle}
-      </i>
+      {!isEdit && (
+        <i
+          className="cursor-pointer"
+          onClick={toggleDoneTodoHandler}
+        >
+          {isComplete ? completeCircle : circle}
+        </i>
+      )}
 
       {(!isEdit) ? (
         <ItemTitle
@@ -62,7 +63,6 @@ export default function Item({ todo }) {
         />
       ) : (
         <EditInputBox
-          id={shortid.generate()}
           text={text}
           editTodoHandler={editTodoHandler}
         />
