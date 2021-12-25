@@ -7,6 +7,7 @@ Usage  | tech
 ------------- | -------------
 UI  | React, tailwind, Figma
 Utils  | shortid
+database | local storage
 Dev env | Vite, eslint, postcss
 production | netlify
 
