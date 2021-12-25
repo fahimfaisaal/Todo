@@ -28,7 +28,7 @@
   }
 
   .view-box {
-    @apply w-full h-80 ring-2 ring-gray-900 dark:ring-gray-100 rounded-lg drop-shadow-md;
+    @apply w-full h-96 ring-2 ring-gray-900 dark:ring-gray-100 rounded-lg drop-shadow-md;
   }
 
   .add-icon {
