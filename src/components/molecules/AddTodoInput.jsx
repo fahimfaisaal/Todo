@@ -1,13 +1,17 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import propTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import enterKey from '../../assets/icon/enter-key';
+import MyDayContext from '../../context/MyDayContext';
 import Input from '../atoms/Input';
 import ItemLayout from '../atoms/ItemLayout';
 
 export default function AddTodoInput({ pushTodo }) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
+  const { setFilter } = useContext(MyDayContext);
 
   useEffect(() => {
     todoInputRef.current.focus();
@@ -23,12 +27,14 @@ export default function AddTodoInput({ pushTodo }) {
 
     if (keyCode === 13) {
       pushTodo(value);
+      setFilter('all');
       setValue('');
     }
   };
 
   const onClickHandler = () => {
     pushTodo(value);
+    setFilter('all');
     setValue('');
   };
 

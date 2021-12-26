@@ -92,6 +92,7 @@ export default function MyDay() {
 
   todoContext.todos = todos;
   todoContext.dispatch = dispatch;
+  todoContext.setFilter = setFilter;
 
   return (
     <MyDayContext.Provider value={todoContext}>

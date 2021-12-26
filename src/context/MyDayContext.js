@@ -3,7 +3,7 @@ import { createContext } from 'react';
 const MyDayContext = createContext({
   todos: [],
   dispatch: null,
-  filter: 'all',
+  setFilter: null,
 });
 
 export default MyDayContext;
