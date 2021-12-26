@@ -1,4 +1,4 @@
-<h1 align="center">Todo <sup><code>1.0</code></sup></h1>
+<h1 align="center">Todo <sup><code>1.5</code></sup></h1>
 
 > A TODO application which build by React
 
