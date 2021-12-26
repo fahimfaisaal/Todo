@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from 'react';
 import MyDayContext from '../../context/MyDayContext';
 import getCurrentDate from '../../utils/getCurrentDate';
+import ItemController from '../molecules/ItemController';
 import ViewBox from '../molecules/ViewBox';
 
 const addTodo = (state, newTodo) => {
@@ -63,6 +64,8 @@ const todoReducer = (state, action) => {
       return editTodo(state, id, editedTodoText);
     case 'TOGGLE_TODO':
       return toggleTodo(state, id);
+    case 'CLEAR_TODOS':
+      return [];
     default:
       return state;
   }
@@ -98,6 +101,7 @@ export default function MyDay() {
   return (
     <MyDayContext.Provider value={todoContext}>
       <ViewBox subHeading="My Day" />
+      <ItemController dispatch={dispatch} placeholder="todos" lengthOfItems={todos.length} />
     </MyDayContext.Provider>
   );
 }

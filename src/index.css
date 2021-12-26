@@ -31,8 +31,16 @@
     @apply w-full h-96 ring-2 ring-gray-900 dark:ring-gray-100 rounded-lg drop-shadow-md;
   }
 
+  .view-layout {
+    @apply max-w-2xl mx-auto px-7 sm:px-3 md:px-0;
+  }
+
   .add-icon {
     @apply w-full flex flex-col justify-center items-center;
+  }
+
+  .clear-button {
+    @apply text-xl hover:text-red-500 dark:hover:text-red-500 mt-3 ring-gray-900 dark:ring-gray-100 dark:text-gray-100 px-2 hover:ring-2 rounded;
   }
 
   .item {
