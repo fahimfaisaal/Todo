@@ -1,6 +1,7 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import MyDayContext from '../../context/MyDayContext';
 import getCurrentDate from '../../utils/getCurrentDate';
+import { getDataFromLocaleStorage, saveToLocaleStorage } from '../../utils/localeStorageFunc';
 import ItemController from '../molecules/ItemController';
 import ViewBox from '../molecules/ViewBox';
 
@@ -50,12 +51,12 @@ const toggleTodo = (state, id) => {
 
 const todoReducer = (state, action) => {
   const {
-    type, id, newTodo, editedTodoText,
+    type, id, newTodo, editedTodoText, fetchData,
   } = action;
 
   switch (type) {
     case 'FETCH_MY_DAY':
-      return action.todos;
+      return fetchData;
     case 'ADD_TODO':
       return addTodo(state, newTodo);
     case 'DELETE_TODO':
@@ -75,33 +76,33 @@ const todoContext = {};
 
 export default function MyDay() {
   const [todos, dispatch] = useReducer(todoReducer, []);
+  const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    const localTodos = localStorage.getItem('myDay');
+  useEffect(
+    getDataFromLocaleStorage
+      .bind(this, 'myDay', dispatch, 'FETCH_MY_DAY'),
+    [],
+  );
 
-    if (localTodos.length) {
-      const convertToJson = JSON.parse(localTodos);
-
-      dispatch({
-        type: 'FETCH_MY_DAY',
-        todos: convertToJson,
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    const convertTodo = JSON.stringify(todos);
-
-    localStorage.setItem('myDay', convertTodo);
-  }, [todos]);
+  useEffect(
+    saveToLocaleStorage
+      .bind(this, 'myDay', todos),
+    [todos],
+  );
 
   todoContext.todos = todos;
   todoContext.dispatch = dispatch;
 
   return (
     <MyDayContext.Provider value={todoContext}>
-      <ViewBox subHeading="My Day" />
-      <ItemController dispatch={dispatch} placeholder="todos" lengthOfItems={todos.length} />
+      <ViewBox subHeading="My Day" filter={filter} />
+      <ItemController
+        dispatch={dispatch}
+        placeholder="todos"
+        lengthOfItems={todos.length}
+        filter={filter}
+        setFilter={setFilter}
+      />
     </MyDayContext.Provider>
   );
 }

@@ -5,7 +5,7 @@ import generateStatus from '../../utils/generateStatus';
 import ItemsViewer from '../atoms/ItemsViewer';
 import ViewBoxHeader from './ViewBoxHeader';
 
-export default function ViewBox({ subHeading }) {
+export default function ViewBox({ subHeading, filter }) {
   const { todos, dispatch } = useContext(MyDayContext);
 
   const completedItemsLength = generateStatus(todos, 'isComplete');
@@ -14,11 +14,16 @@ export default function ViewBox({ subHeading }) {
   return (
     <div className="view-layout">
       <ViewBoxHeader subHeading={subHeading} status={status} />
-      <ItemsViewer items={todos} dispatch={dispatch} />
+      <ItemsViewer
+        items={todos}
+        dispatch={dispatch}
+        filter={filter}
+      />
     </div>
   );
 }
 
 ViewBox.propTypes = {
   subHeading: propTypes.string.isRequired,
+  filter: propTypes.string.isRequired,
 };
