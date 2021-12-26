@@ -10,15 +10,18 @@ export default function ItemController({
     let isClear = false;
 
     if (lengthOfItems) {
-    // eslint-disable-next-line no-alert
+      // eslint-disable-next-line no-alert
       isClear = confirm(`Could you remove all ${placeholder}`);
     }
 
-    isClear && dispatch({
-      type: 'CLEAR_TODOS',
-    });
-  };
+    if (isClear) {
+      setFilter('all');
 
+      dispatch({
+        type: 'CLEAR_TODOS',
+      });
+    }
+  };
   const filterHandler = (e) => {
     const { innerText } = e.target;
 
