@@ -40,7 +40,7 @@
   }
   
   .button {
-    @apply text-xl mt-3 px-2 rounded dark:text-gray-100;
+    @apply text-sm sm:text-xl mt-3 px-1 sm:px-2 rounded dark:text-gray-100;
   }
 
   .filter-button {
@@ -56,11 +56,15 @@
   }
 
   .item {
-    @apply relative mx-3 my-3 py-3 px-3 rounded ring-2  ring-gray-900 dark:ring-gray-100 flex items-center bg-gray-200 dark:bg-gray-700;
+    @apply relative mx-3 my-3 sm:py-3 sm:px-3 py-1 px-2 rounded ring-2 ring-gray-900 dark:ring-gray-100 flex items-center bg-gray-200 dark:bg-gray-700;
+  }
+
+  .item-title {
+    @apply flex-grow pl-2 font-roboto text-lg sm:text-2xl;
   }
 
   .item-input {
-    @apply pl-2 w-full text-2xl bg-transparent focus:outline-none dark:text-gray-100;
+    @apply pl-2 w-full sm:text-2xl text-lg  bg-transparent focus:outline-none dark:text-gray-100;
   }
 }
 

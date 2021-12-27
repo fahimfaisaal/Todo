@@ -11,7 +11,7 @@ import EditInputBox from './EditInputBox';
 
 export default function Item({ todo }) {
   const {
-    text, isComplete, id,
+    text, isComplete, id, editedAt,
   } = todo;
 
   const { dispatch } = useContext(MyDayContext);
@@ -68,8 +68,12 @@ export default function Item({ todo }) {
         />
       )}
 
+      {editedAt && (
+        <p className="sm:text-sm text-xs text-gray-400 pr-4">edited</p>
+      )}
+
       {(!isComplete && !isEdit) && (
-        <i className="px-4 cursor-pointer" onClick={toggleEditTodoHandler}>
+        <i className="pr-4 cursor-pointer" onClick={toggleEditTodoHandler}>
           {editIcon}
         </i>
       )}

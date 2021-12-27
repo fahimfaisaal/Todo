@@ -1,5 +1,5 @@
 const enterKey = (
-  <svg className="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <svg className="w-5 sm:w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
     <path
       className="dark:fill-gray-100"
       d="M70.5,5h-31C37.0185547,5,35,7.0185547,35,9.5V35H9.5C7.0185547,35,5,37.0185547,5,39.5v31
