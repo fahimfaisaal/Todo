@@ -92,6 +92,7 @@ export default function MyDay() {
 
   todoContext.todos = todos;
   todoContext.dispatch = dispatch;
+  todoContext.filter = filter;
   todoContext.setFilter = setFilter;
 
   return (
