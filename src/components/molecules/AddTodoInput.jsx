@@ -11,7 +11,7 @@ import ItemLayout from '../atoms/ItemLayout';
 export default function AddTodoInput({ pushTodo }) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
-  const { setFilter } = useContext(MyDayContext);
+  const { filter, setFilter } = useContext(MyDayContext);
 
   useEffect(() => {
     todoInputRef.current.focus();
@@ -27,14 +27,14 @@ export default function AddTodoInput({ pushTodo }) {
 
     if (keyCode === 13) {
       pushTodo(value);
-      setFilter('all');
+      filter === 'done' && setFilter('due');
       setValue('');
     }
   };
 
   const onClickHandler = () => {
     pushTodo(value);
-    setFilter('all');
+    filter === 'done' && setFilter('due');
     setValue('');
   };
 
