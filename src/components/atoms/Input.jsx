@@ -7,7 +7,7 @@ function Input({
   return (
     <input
       ref={inputRef}
-      className={classes || ''}
+      className={(classes || '').trim()}
       type={type}
       placeholder={placeholder}
       value={value}
