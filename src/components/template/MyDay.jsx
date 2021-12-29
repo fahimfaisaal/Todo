@@ -21,14 +21,6 @@ export default function MyDay() {
     [todos],
   );
 
-<<<<<<< HEAD
-  todoContext.todos = todos;
-  todoContext.dispatch = dispatch;
-  todoContext.filter = filter;
-  todoContext.setFilter = setFilter;
-
-=======
->>>>>>> dev-list
   return (
     <div className="my-day">
       <ViewBox
