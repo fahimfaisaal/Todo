@@ -28,7 +28,7 @@
   }
 
   .view-box {
-    @apply w-full h-96 ring-2 ring-gray-900 dark:ring-gray-100 rounded-lg drop-shadow-md;
+    @apply w-full h-128 ring-2 ring-gray-900 dark:ring-gray-100 rounded-lg drop-shadow-md;
   }
 
   .view-layout {
@@ -43,11 +43,11 @@
     @apply text-sm sm:text-xl mt-3 px-1 sm:px-2 rounded dark:text-gray-100;
   }
 
-  .filter-button {
+  .visibility-button {
     @apply button hover:text-blue-400 mr-3
   }
 
-  .active-filter {
+  .active-visibility {
     @apply ring-2 ring-blue-400
   }
 
@@ -64,7 +64,7 @@
   }
 
   .item-input {
-    @apply pl-2 w-full sm:text-2xl text-lg  bg-transparent focus:outline-none dark:text-gray-100;
+    @apply pl-2 w-full sm:text-2xl text-lg bg-transparent focus:outline-none dark:text-gray-100;
   }
 }
 
