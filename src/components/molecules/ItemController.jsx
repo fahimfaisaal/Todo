@@ -2,9 +2,9 @@
 import propTypes from 'prop-types';
 import Button from '../atoms/Button';
 
-const filterRecognizer = (filterStatus, status) => (filterStatus === status ? ' active-filter' : '');
+const visibilityRecognizer = (visibilityStatus, status) => (visibilityStatus === status ? ' active-visibility' : '');
 export default function ItemController({
-  dispatch, placeholder, lengthOfItems, filter, setFilter,
+  dispatch, placeholder, setVisibility, visibility, lengthOfItems,
 }) {
   const clearItems = () => {
     let isClear = false;
@@ -15,28 +15,26 @@ export default function ItemController({
     }
 
     if (isClear) {
-      setFilter('all');
-
-      dispatch({
-        type: 'CLEAR_TODOS',
-      });
+      setVisibility('all');
+      dispatch({ type: 'CLEAR' });
     }
   };
-  const filterHandler = (e) => {
+
+  const visibilityHandler = (e) => {
     const { innerText } = e.target;
 
-    setFilter(innerText);
+    setVisibility(innerText);
   };
 
-  const isAll = filterRecognizer(filter, 'all');
-  const isDue = filterRecognizer(filter, 'due');
-  const isDone = filterRecognizer(filter, 'done');
+  const isAll = visibilityRecognizer(visibility, 'all');
+  const isDue = visibilityRecognizer(visibility, 'due');
+  const isDone = visibilityRecognizer(visibility, 'done');
 
   return (
     <div className="view-layout flex justify-end items-center">
-      <Button classes={`filter-button${isAll}`} innerText="all" handler={filterHandler} />
-      <Button classes={`filter-button${isDue}`} innerText="due" handler={filterHandler} />
-      <Button classes={`filter-button${isDone}`} innerText="done" handler={filterHandler} />
+      <Button classes={`visibility-button${isAll}`} innerText="all" handler={visibilityHandler} />
+      <Button classes={`visibility-button${isDue}`} innerText="due" handler={visibilityHandler} />
+      <Button classes={`visibility-button${isDone}`} innerText="done" handler={visibilityHandler} />
       <Button classes="clear-button" innerText="clear" handler={clearItems} />
     </div>
   );
@@ -46,6 +44,6 @@ ItemController.propTypes = {
   dispatch: propTypes.func.isRequired,
   placeholder: propTypes.string.isRequired,
   lengthOfItems: propTypes.number.isRequired,
-  filter: propTypes.string.isRequired,
-  setFilter: propTypes.func.isRequired,
+  visibility: propTypes.string.isRequired,
+  setVisibility: propTypes.func.isRequired,
 };

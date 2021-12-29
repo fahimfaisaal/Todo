@@ -10,20 +10,31 @@ export const saveToLocaleStorage = (key, data) => {
 
 /**
  * @param {string} key
- * @param {function} dispatch
- * @param {string} type
- * @param {object} others
+ * @returns {any}
  */
-export const getDataFromLocaleStorage = (key, dispatch, type, others = {}) => {
+export const getDataFromLocaleStorage = (key) => {
   const localeItems = localStorage.getItem(key);
 
-  if (localeItems.length) {
-    const convertToJson = JSON.parse(localeItems);
+  if (Array.isArray(localeItems)) {
+    const parsedData = JSON.parse(localeItems);
 
-    dispatch({
-      type,
-      fetchData: convertToJson,
-      ...others,
-    });
+    return parsedData;
   }
+
+  return localeItems;
+};
+
+/**
+ * @param {string} key
+ * @callback dispatch
+ */
+export const dispatchFetchData = (key, dispatch) => {
+  const fetchData = JSON.parse(getDataFromLocaleStorage(key));
+
+  const fetchAction = {
+    type: 'FETCH',
+    fetchData,
+  };
+
+  dispatch(fetchAction);
 };

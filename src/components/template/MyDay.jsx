@@ -1,88 +1,19 @@
 import { useEffect, useReducer, useState } from 'react';
-import MyDayContext from '../../context/MyDayContext';
-import getCurrentDate from '../../utils/getCurrentDate';
-import { getDataFromLocaleStorage, saveToLocaleStorage } from '../../utils/localeStorageFunc';
+import createTodo from '../../utils/createTodo';
+import filterItems from '../../utils/filterItems';
+import generateStatus from '../../utils/generateStatus';
+import itemsReducer from '../../utils/itemsReducer';
+import { dispatchFetchData, saveToLocaleStorage } from '../../utils/localeStorageFunc';
 import ItemController from '../molecules/ItemController';
 import ViewBox from '../molecules/ViewBox';
 
-const addTodo = (state, newTodo) => {
-  if (newTodo.text) {
-    return [newTodo, ...state];
-  }
-
-  return state;
-};
-
-const editTodo = (state, id, editedTodoText) => {
-  const editedTodo = state.find((todo) => todo.id === id);
-  const editedTodoIndex = state.findIndex((todo) => todo.id === id);
-
-  const updateTodo = {
-    ...editedTodo,
-    text: editedTodoText,
-    editedAt: getCurrentDate(),
-  };
-
-  const pushEditedTodo = state.reduce((updatedArr, todo, index) => {
-    if (index !== editedTodoIndex) {
-      updatedArr.push(todo);
-    } else {
-      updatedArr.push(updateTodo);
-    }
-    return updatedArr;
-  }, []);
-
-  return pushEditedTodo;
-};
-
-const toggleTodo = (state, id) => {
-  const allWithoutDone = state.filter((todo) => todo.id !== id);
-  let doneTodo = state.find((todo) => todo.id === id);
-
-  const isDone = doneTodo.isComplete;
-
-  doneTodo = {
-    ...doneTodo,
-    isComplete: !isDone,
-  };
-
-  return !isDone ? [...allWithoutDone, doneTodo] : [doneTodo, ...allWithoutDone];
-};
-
-const todoReducer = (state, action) => {
-  const {
-    type, id, newTodo, editedTodoText, fetchData,
-  } = action;
-
-  switch (type) {
-    case 'FETCH_MY_DAY':
-      return fetchData;
-    case 'ADD_TODO':
-      return addTodo(state, newTodo);
-    case 'DELETE_TODO':
-      return state.filter((todo) => todo.id !== id);
-    case 'EDIT_TODO':
-      return editTodo(state, id, editedTodoText);
-    case 'TOGGLE_TODO':
-      return toggleTodo(state, id);
-    case 'CLEAR_TODOS':
-      return [];
-    default:
-      return state;
-  }
-};
-
-const todoContext = {};
-
 export default function MyDay() {
-  const [todos, dispatch] = useReducer(todoReducer, []);
-  const [filter, setFilter] = useState('all');
+  const [todos, dispatch] = useReducer(itemsReducer, []);
+  const [visibility, setVisibility] = useState('all');
+  const filterTodos = filterItems(todos, visibility);
+  const status = generateStatus(todos);
 
-  useEffect(
-    getDataFromLocaleStorage
-      .bind(this, 'myDay', dispatch, 'FETCH_MY_DAY'),
-    [],
-  );
+  useEffect(dispatchFetchData.bind(this, 'myDay', dispatch), []);
 
   useEffect(
     saveToLocaleStorage
@@ -90,20 +21,24 @@ export default function MyDay() {
     [todos],
   );
 
-  todoContext.todos = todos;
-  todoContext.dispatch = dispatch;
-  todoContext.setFilter = setFilter;
-
   return (
-    <MyDayContext.Provider value={todoContext}>
-      <ViewBox subHeading="My Day" filter={filter} />
+    <div className="my-day">
+      <ViewBox
+        subHeading="My Day"
+        status={status}
+        items={filterTodos}
+        dispatch={dispatch}
+        visibility={visibility}
+        setVisibility={setVisibility}
+        createItem={createTodo}
+      />
       <ItemController
         dispatch={dispatch}
         placeholder="todos"
         lengthOfItems={todos.length}
-        filter={filter}
-        setFilter={setFilter}
+        visibility={visibility}
+        setVisibility={setVisibility}
       />
-    </MyDayContext.Provider>
+    </div>
   );
 }

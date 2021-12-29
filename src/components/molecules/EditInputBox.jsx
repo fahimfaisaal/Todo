@@ -1,11 +1,10 @@
 import propTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
-import enterKey from '../../assets/icon/enter-key';
-import Input from '../atoms/Input';
+import keyPressHandler from '../../utils/keyPressHandler';
+import InputBox from './InputBox';
 
-export default function EditInputBox({
-  text, editTodoHandler,
-}) {
+// # clear
+export default function EditInputBox({ text, editItemHandler }) {
   const [editValue, setEditValue] = useState(text);
   const editedNodeRef = useRef(null);
 
@@ -15,35 +14,29 @@ export default function EditInputBox({
 
   const onChangeHandler = (e) => setEditValue(e.target.value);
 
-  const onKeyPressHandler = (e) => {
-    const keyCode = e.keyCode || e.which;
-
-    if (keyCode === 13 && editValue) {
-      editTodoHandler(editValue);
-    }
+  const enterKeyPressHandler = (e) => {
+    editValue && (
+      keyPressHandler(e, () => editItemHandler(editValue))
+    );
   };
 
   const updateOnClick = () => {
-    editValue && editTodoHandler(editValue);
+    editValue && editItemHandler(editValue);
   };
 
   return (
-    <>
-      <Input
-        ref={editedNodeRef}
-        classes="item-input"
-        placeholder="add your day"
-        value={editValue}
-        handler={onChangeHandler}
-        keyPressHandler={onKeyPressHandler}
-      />
-
-      <i className="w-9 cursor-pointer" onClick={updateOnClick}>{enterKey}</i>
-    </>
+    <InputBox
+      inputRef={editedNodeRef}
+      placeholder="edit your day"
+      value={editValue}
+      changeHandler={onChangeHandler}
+      keyPressHandler={enterKeyPressHandler}
+      clickHandler={updateOnClick}
+    />
   );
 }
 
 EditInputBox.propTypes = {
   text: propTypes.string.isRequired,
-  editTodoHandler: propTypes.func.isRequired,
+  editItemHandler: propTypes.func.isRequired,
 };

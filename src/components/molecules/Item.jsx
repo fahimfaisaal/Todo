@@ -1,48 +1,49 @@
 import propTypes from 'prop-types';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import circle from '../../assets/icon/circle';
 import completeCircle from '../../assets/icon/circle-complete';
 import deleteIcon from '../../assets/icon/delete';
 import editIcon from '../../assets/icon/edit';
-import MyDayContext from '../../context/MyDayContext';
 import ItemLayout from '../atoms/ItemLayout';
 import ItemTitle from '../atoms/ItemTitle';
 import EditInputBox from './EditInputBox';
 
-export default function Item({ todo }) {
+export default function Item({ item, dispatch }) {
   const {
     text, isComplete, id, editedAt,
-  } = todo;
+  } = item;
 
-  const { dispatch } = useContext(MyDayContext);
   const [isEdit, setEdit] = useState(false);
 
-  const deleteTodoHandler = () => {
+  const deleteItemHandler = () => {
     dispatch({
-      type: 'DELETE_TODO',
+      type: 'DELETE',
       id,
     });
   };
 
-  const editTodoHandler = (editedValue) => {
-    dispatch({
-      type: 'EDIT_TODO',
+  const editItemHandler = (editedValue) => {
+    const editAction = {
+      type: 'EDIT',
       id,
-      editedTodoText: editedValue,
-    });
+      editedItemText: editedValue,
+    };
 
+    dispatch(editAction);
     setEdit(!isEdit);
   };
 
-  const toggleEditTodoHandler = () => {
+  const toggleEditItemHandler = () => {
     setEdit(!isEdit);
   };
 
-  const toggleDoneTodoHandler = () => {
-    dispatch({
-      type: 'TOGGLE_TODO',
+  const toggleDoneItemHandler = () => {
+    const toggleAction = {
+      type: 'TOGGLE',
       id,
-    });
+    };
+
+    dispatch(toggleAction);
   };
 
   return (
@@ -50,7 +51,7 @@ export default function Item({ todo }) {
       {!isEdit && (
         <i
           className="cursor-pointer"
-          onClick={toggleDoneTodoHandler}
+          onClick={toggleDoneItemHandler}
         >
           {isComplete ? completeCircle : circle}
         </i>
@@ -64,25 +65,26 @@ export default function Item({ todo }) {
       ) : (
         <EditInputBox
           text={text}
-          editTodoHandler={editTodoHandler}
+          editItemHandler={editItemHandler}
         />
       )}
 
       {editedAt && (
-        <p className="sm:text-sm text-xs text-gray-400 pr-4">edited</p>
+        <p className="text-xs text-gray-400 pr-2">edited</p>
       )}
 
       {(!isComplete && !isEdit) && (
-        <i className="pr-4 cursor-pointer" onClick={toggleEditTodoHandler}>
+        <i className="pr-4 cursor-pointer" onClick={toggleEditItemHandler}>
           {editIcon}
         </i>
       )}
 
-      <i className="cursor-pointer" onClick={deleteTodoHandler}>{deleteIcon}</i>
+      <i className="cursor-pointer" onClick={deleteItemHandler}>{deleteIcon}</i>
     </ItemLayout>
   );
 }
 
 Item.propTypes = {
-  todo: propTypes.objectOf(propTypes.any),
+  item: propTypes.objectOf(propTypes.any),
+  dispatch: propTypes.func.isRequired,
 };
