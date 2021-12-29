@@ -72,20 +72,62 @@ const toggleItem = (items, id) => {
     : [doneItem, ...allWithoutDone];
 };
 
-const itemsReducer = (items, action) => {
+const itemsReducer = (state, action) => {
+  const { items } = state;
+
   switch (action.type) {
-    case 'FETCH':
-      return action.fetchData;
-    case 'ADD':
-      return addItem(items, action);
-    case 'DELETE':
-      return deleteItem(items, action.id);
-    case 'EDIT':
-      return editItem(items, action);
-    case 'TOGGLE':
-      return toggleItem(items, action.id);
+    case 'FETCH': {
+      const fetchItems = action.payload.fetchData;
+      return {
+        ...state,
+        items: fetchItems,
+      };
+    }
+    case 'FILTER': {
+      const { visibility } = action.payload;
+
+      return {
+        ...state,
+        visibility,
+      };
+    }
+    case 'ADD': {
+      const newItems = addItem(items, action.payload);
+
+      return {
+        ...state,
+        items: newItems,
+      };
+    }
+    case 'DELETE': {
+      const withoutDeleted = deleteItem(items, action.payload.id);
+
+      return {
+        ...state,
+        items: withoutDeleted,
+      };
+    }
+    case 'EDIT': {
+      const withEditedItems = editItem(items, action.payload);
+
+      return {
+        ...state,
+        items: withEditedItems,
+      };
+    }
+    case 'TOGGLE': {
+      const withToggleItems = toggleItem(items, action.payload.id);
+
+      return {
+        ...state,
+        items: withToggleItems,
+      };
+    }
     case 'CLEAR':
-      return [];
+      return {
+        ...state,
+        items: [],
+      };
     default:
       return items;
   }

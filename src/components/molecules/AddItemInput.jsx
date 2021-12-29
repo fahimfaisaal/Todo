@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import keyPressHandler from '../../utils/keyPressHandler';
 import ItemLayout from '../atoms/ItemLayout';
 import InputBox from './InputBox';
-// # Clear
-export default function AddItemInput({ addItem, visibility, setVisibility }) {
+
+export default function AddItemInput({ addItem, visibility, dispatch }) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
 
@@ -14,7 +14,18 @@ export default function AddItemInput({ addItem, visibility, setVisibility }) {
 
   const submitItem = () => {
     addItem(value);
-    visibility === 'done' && setVisibility('due');
+
+    if (visibility === 'done') {
+      const filterAction = {
+        type: 'FILTER',
+        payload: {
+          visibility,
+        },
+      };
+
+      dispatch(filterAction);
+    }
+
     setValue('');
   };
 
@@ -49,5 +60,5 @@ export default function AddItemInput({ addItem, visibility, setVisibility }) {
 AddItemInput.propTypes = {
   addItem: propTypes.func.isRequired,
   visibility: propTypes.string.isRequired,
-  setVisibility: propTypes.func.isRequired,
+  dispatch: propTypes.func.isRequired,
 };

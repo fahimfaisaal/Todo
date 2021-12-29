@@ -1,20 +1,23 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import createTodo from '../../utils/createTodo';
-import filterItems from '../../utils/filterItems';
-import generateStatus from '../../utils/generateStatus';
-import itemsReducer from '../../utils/itemsReducer';
+import stateReducer from '../../utils/stateReducer';
 import { dispatchFetchData, saveToLocaleStorage } from '../../utils/localeStorageFunc';
 import ItemController from '../molecules/ItemController';
 import ViewBox from '../molecules/ViewBox';
 
+const initialMyDayState = {
+  items: [],
+  visibility: 'all',
+};
+
 export default function MyDay() {
-  const [todos, dispatch] = useReducer(itemsReducer, []);
-  const [visibility, setVisibility] = useState('all');
-  const filterTodos = filterItems(todos, visibility);
-  const status = generateStatus(todos);
+  const [myDayState, dispatchMyDay] = useReducer(stateReducer, initialMyDayState);
+  const { items: todos } = myDayState;
 
-  useEffect(dispatchFetchData.bind(this, 'myDay', dispatch), []);
+  // fetch todos from localStorage
+  useEffect(dispatchFetchData.bind(this, 'myDay', dispatchMyDay), []);
 
+  // save todos to localStorage on change state
   useEffect(
     saveToLocaleStorage
       .bind(this, 'myDay', todos),
@@ -25,19 +28,14 @@ export default function MyDay() {
     <div className="my-day">
       <ViewBox
         subHeading="My Day"
-        status={status}
-        items={filterTodos}
-        dispatch={dispatch}
-        visibility={visibility}
-        setVisibility={setVisibility}
+        state={myDayState}
+        dispatch={dispatchMyDay}
         createItem={createTodo}
       />
       <ItemController
-        dispatch={dispatch}
+        state={myDayState}
+        dispatch={dispatchMyDay}
         placeholder="todos"
-        lengthOfItems={todos.length}
-        visibility={visibility}
-        setVisibility={setVisibility}
       />
     </div>
   );

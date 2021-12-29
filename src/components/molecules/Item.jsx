@@ -9,24 +9,29 @@ import ItemTitle from '../atoms/ItemTitle';
 import EditInputBox from './EditInputBox';
 
 export default function Item({ item, dispatch }) {
+  const [isEdit, setEdit] = useState(false);
   const {
     text, isComplete, id, editedAt,
   } = item;
 
-  const [isEdit, setEdit] = useState(false);
-
   const deleteItemHandler = () => {
-    dispatch({
+    const deleteAction = {
       type: 'DELETE',
-      id,
-    });
+      payload: {
+        id,
+      },
+    };
+
+    dispatch(deleteAction);
   };
 
   const editItemHandler = (editedValue) => {
     const editAction = {
       type: 'EDIT',
-      id,
-      editedItemText: editedValue,
+      payload: {
+        id,
+        editedItemText: editedValue,
+      },
     };
 
     dispatch(editAction);
@@ -40,7 +45,9 @@ export default function Item({ item, dispatch }) {
   const toggleDoneItemHandler = () => {
     const toggleAction = {
       type: 'TOGGLE',
-      id,
+      payload: {
+        id,
+      },
     };
 
     dispatch(toggleAction);

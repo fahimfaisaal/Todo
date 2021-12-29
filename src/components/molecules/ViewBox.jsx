@@ -1,24 +1,32 @@
 import propTypes from 'prop-types';
+import filterItems from '../../utils/filterItems';
+import generateStatus from '../../utils/generateStatus';
 import ItemsViewer from '../atoms/ItemsViewer';
 import AddItemInput from './AddItemInput';
 import Item from './Item';
 import ViewBoxHeader from './ViewBoxHeader';
 
 export default function ViewBox({
-  subHeading, status, items, dispatch,
-  visibility, setVisibility, createItem,
+  subHeading, state, dispatch, createItem,
 }) {
+  const { items, visibility } = state;
+
+  const status = generateStatus(items);
+
   const addItem = (text) => {
-    const action = {
+    const addAction = {
       type: 'ADD',
-      text,
-      createItemCallback: createItem,
+      payload: {
+        text,
+        createItemCallback: createItem,
+      },
     };
 
-    dispatch(action);
+    dispatch(addAction);
   };
 
-  const itemsToJsx = items.map((item) => (
+  const filteredItems = filterItems(items, visibility);
+  const itemsToJsx = filteredItems.map((item) => (
     <Item
       key={item.id}
       item={item}
@@ -30,12 +38,14 @@ export default function ViewBox({
     <div className="view-layout">
       <ViewBoxHeader subHeading={subHeading} status={status} />
       <ItemsViewer>
-        <AddItemInput
-          addItem={addItem}
-          visibility={visibility}
-          setVisibility={setVisibility}
-        />
-        {itemsToJsx}
+        <>
+          <AddItemInput
+            addItem={addItem}
+            visibility={visibility}
+            dispatch={dispatch}
+          />
+          {itemsToJsx}
+        </>
       </ItemsViewer>
     </div>
   );
@@ -43,10 +53,7 @@ export default function ViewBox({
 
 ViewBox.propTypes = {
   subHeading: propTypes.string.isRequired,
-  status: propTypes.string.isRequired,
-  items: propTypes.arrayOf(propTypes.object),
-  visibility: propTypes.string.isRequired,
-  setVisibility: propTypes.func.isRequired,
+  state: propTypes.objectOf(propTypes.any),
   dispatch: propTypes.func.isRequired,
   createItem: propTypes.func.isRequired,
 };

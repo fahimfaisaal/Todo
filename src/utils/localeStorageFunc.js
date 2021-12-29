@@ -33,7 +33,9 @@ export const dispatchFetchData = (key, dispatch) => {
 
   const fetchAction = {
     type: 'FETCH',
-    fetchData,
+    payload: {
+      fetchData,
+    },
   };
 
   dispatch(fetchAction);

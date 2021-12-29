@@ -3,27 +3,42 @@ import propTypes from 'prop-types';
 import Button from '../atoms/Button';
 
 const visibilityRecognizer = (visibilityStatus, status) => (visibilityStatus === status ? ' active-visibility' : '');
-export default function ItemController({
-  dispatch, placeholder, setVisibility, visibility, lengthOfItems,
-}) {
+export default function ItemController({ dispatch, placeholder, state }) {
+  const { items, visibility } = state;
+
   const clearItems = () => {
     let isClear = false;
 
-    if (lengthOfItems) {
+    if (items.length) {
       // eslint-disable-next-line no-alert
       isClear = confirm(`Could you remove all ${placeholder}`);
     }
 
     if (isClear) {
-      setVisibility('all');
       dispatch({ type: 'CLEAR' });
+
+      const filterAction = {
+        type: 'FILTER',
+        payload: {
+          visibility: 'all',
+        },
+      };
+
+      dispatch(filterAction);
     }
   };
 
   const visibilityHandler = (e) => {
-    const { innerText } = e.target;
+    const { innerText: filter } = e.target;
 
-    setVisibility(innerText);
+    const filterAction = {
+      type: 'FILTER',
+      payload: {
+        visibility: filter,
+      },
+    };
+
+    dispatch(filterAction);
   };
 
   const isAll = visibilityRecognizer(visibility, 'all');
@@ -43,7 +58,5 @@ export default function ItemController({
 ItemController.propTypes = {
   dispatch: propTypes.func.isRequired,
   placeholder: propTypes.string.isRequired,
-  lengthOfItems: propTypes.number.isRequired,
-  visibility: propTypes.string.isRequired,
-  setVisibility: propTypes.func.isRequired,
+  state: propTypes.objectOf(propTypes.any),
 };
