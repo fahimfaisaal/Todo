@@ -1,13 +1,16 @@
 import propTypes from 'prop-types';
 import filterItems from '../../utils/filterItems';
 import generateStatus from '../../utils/generateStatus';
+import {
+  addNewItem, deleteItem, editItem, toggleItem
+} from '../../utils/stateManager';
 import ItemsViewer from '../atoms/ItemsViewer';
 import AddItemInput from './AddItemInput';
 import Item from './Item';
 import ViewBoxHeader from './ViewBoxHeader';
 
 export default function ViewBox({
-  subHeading, state, dispatch, createItem,
+  subHeading, state, setMyDay, createItem,
 }) {
   const { items, visibility } = state;
 
@@ -15,14 +18,45 @@ export default function ViewBox({
 
   const addItem = (text) => {
     const addAction = {
-      type: 'ADD',
-      payload: {
-        text,
-        createItemCallback: createItem,
-      },
+      text,
+      createItemCallback: createItem,
     };
 
-    dispatch(addAction);
+    const newItems = addNewItem(items, addAction);
+    console.log(newItems);
+
+    const newState = {
+      ...state,
+      items: newItems,
+    };
+
+    setMyDay(newState);
+  };
+
+  const deleteHandler = (id) => {
+    const withoutDeletedItem = deleteItem(items, id);
+    setMyDay({
+      ...state,
+      items: withoutDeletedItem,
+    });
+  };
+
+  const editHandler = (editedAction) => {
+    const withEditedValue = editItem(items, editedAction);
+
+    setMyDay({
+      ...state,
+      items: withEditedValue,
+    });
+  };
+
+  const toggleHandler = (id) => {
+    const withToggleItem = toggleItem(items, id);
+
+    setMyDay({
+      ...state,
+      items: withToggleItem,
+    });
   };
 
   const filteredItems = filterItems(items, visibility);
@@ -30,7 +64,10 @@ export default function ViewBox({
     <Item
       key={item.id}
       item={item}
-      dispatch={dispatch}
+      setMyDay={setMyDay}
+      deleteHandler={deleteHandler}
+      editHandler={editHandler}
+      toggleHandler={toggleHandler}
     />
   ));
 
@@ -41,8 +78,8 @@ export default function ViewBox({
         <>
           <AddItemInput
             addItem={addItem}
-            visibility={visibility}
-            dispatch={dispatch}
+            state={state}
+            setMyDay={setMyDay}
           />
           {itemsToJsx}
         </>
@@ -54,6 +91,6 @@ export default function ViewBox({
 ViewBox.propTypes = {
   subHeading: propTypes.string.isRequired,
   state: propTypes.objectOf(propTypes.any),
-  dispatch: propTypes.func.isRequired,
+  setMyDay: propTypes.func.isRequired,
   createItem: propTypes.func.isRequired,
 };

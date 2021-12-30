@@ -8,49 +8,26 @@ import ItemLayout from '../atoms/ItemLayout';
 import ItemTitle from '../atoms/ItemTitle';
 import EditInputBox from './EditInputBox';
 
-export default function Item({ item, dispatch }) {
+export default function Item({
+  item, deleteHandler, editHandler, toggleHandler,
+}) {
   const [isEdit, setEdit] = useState(false);
   const {
     text, isComplete, id, editedAt,
   } = item;
 
-  const deleteItemHandler = () => {
-    const deleteAction = {
-      type: 'DELETE',
-      payload: {
-        id,
-      },
-    };
-
-    dispatch(deleteAction);
-  };
-
   const editItemHandler = (editedValue) => {
     const editAction = {
-      type: 'EDIT',
-      payload: {
-        id,
-        editedItemText: editedValue,
-      },
+      id,
+      editedItemText: editedValue,
     };
 
-    dispatch(editAction);
+    editHandler(editAction);
     setEdit(!isEdit);
   };
 
-  const toggleEditItemHandler = () => {
+  const toggleEditIconHandler = () => {
     setEdit(!isEdit);
-  };
-
-  const toggleDoneItemHandler = () => {
-    const toggleAction = {
-      type: 'TOGGLE',
-      payload: {
-        id,
-      },
-    };
-
-    dispatch(toggleAction);
   };
 
   return (
@@ -58,7 +35,7 @@ export default function Item({ item, dispatch }) {
       {!isEdit && (
         <i
           className="cursor-pointer"
-          onClick={toggleDoneItemHandler}
+          onClick={() => toggleHandler(id)}
         >
           {isComplete ? completeCircle : circle}
         </i>
@@ -81,17 +58,19 @@ export default function Item({ item, dispatch }) {
       )}
 
       {(!isComplete && !isEdit) && (
-        <i className="pr-4 cursor-pointer" onClick={toggleEditItemHandler}>
+        <i className="pr-4 cursor-pointer" onClick={toggleEditIconHandler}>
           {editIcon}
         </i>
       )}
 
-      <i className="cursor-pointer" onClick={deleteItemHandler}>{deleteIcon}</i>
+      <i className="cursor-pointer" onClick={() => deleteHandler(id)}>{deleteIcon}</i>
     </ItemLayout>
   );
 }
 
 Item.propTypes = {
   item: propTypes.objectOf(propTypes.any),
-  dispatch: propTypes.func.isRequired,
+  deleteHandler: propTypes.func.isRequired,
+  editHandler: propTypes.func.isRequired,
+  toggleHandler: propTypes.func.isRequired,
 };

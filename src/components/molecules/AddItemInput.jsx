@@ -4,9 +4,10 @@ import keyPressHandler from '../../utils/keyPressHandler';
 import ItemLayout from '../atoms/ItemLayout';
 import InputBox from './InputBox';
 
-export default function AddItemInput({ addItem, visibility, dispatch }) {
+export default function AddItemInput({ addItem, state, setMyDay }) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
+  const { visibility } = state;
 
   useEffect(() => {
     todoInputRef.current.focus();
@@ -17,13 +18,11 @@ export default function AddItemInput({ addItem, visibility, dispatch }) {
 
     if (visibility === 'done') {
       const filterAction = {
-        type: 'FILTER',
-        payload: {
-          visibility,
-        },
+        ...state,
+        visibility: 'due',
       };
 
-      dispatch(filterAction);
+      setMyDay(filterAction);
     }
 
     setValue('');
@@ -59,6 +58,6 @@ export default function AddItemInput({ addItem, visibility, dispatch }) {
 
 AddItemInput.propTypes = {
   addItem: propTypes.func.isRequired,
-  visibility: propTypes.string.isRequired,
-  dispatch: propTypes.func.isRequired,
+  state: propTypes.string.isRequired,
+  setMyDay: propTypes.func.isRequired,
 };

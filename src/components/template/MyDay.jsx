@@ -1,7 +1,6 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import createTodo from '../../utils/createTodo';
-import stateReducer from '../../utils/stateReducer';
-import { dispatchFetchData, saveToLocaleStorage } from '../../utils/localeStorageFunc';
+import { saveToLocaleStorage } from '../../utils/localeStorageFunc';
 import ItemController from '../molecules/ItemController';
 import ViewBox from '../molecules/ViewBox';
 
@@ -11,11 +10,18 @@ const initialMyDayState = {
 };
 
 export default function MyDay() {
-  const [myDayState, dispatchMyDay] = useReducer(stateReducer, initialMyDayState);
+  const [myDayState, setMyDay] = useState(initialMyDayState);
   const { items: todos } = myDayState;
 
   // fetch todos from localStorage
-  useEffect(dispatchFetchData.bind(this, 'myDay', dispatchMyDay), []);
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('myDay'));
+
+    setMyDay({
+      ...myDayState,
+      items: data,
+    });
+  }, []);
 
   // save todos to localStorage on change state
   useEffect(
@@ -29,12 +35,12 @@ export default function MyDay() {
       <ViewBox
         subHeading="My Day"
         state={myDayState}
-        dispatch={dispatchMyDay}
+        setMyDay={setMyDay}
         createItem={createTodo}
       />
       <ItemController
         state={myDayState}
-        dispatch={dispatchMyDay}
+        setMyDay={setMyDay}
         placeholder="todos"
       />
     </div>

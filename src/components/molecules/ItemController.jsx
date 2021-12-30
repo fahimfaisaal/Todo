@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import Button from '../atoms/Button';
 
 const visibilityRecognizer = (visibilityStatus, status) => (visibilityStatus === status ? ' active-visibility' : '');
-export default function ItemController({ dispatch, placeholder, state }) {
+export default function ItemController({ setMyDay, placeholder, state }) {
   const { items, visibility } = state;
 
   const clearItems = () => {
@@ -15,16 +15,10 @@ export default function ItemController({ dispatch, placeholder, state }) {
     }
 
     if (isClear) {
-      dispatch({ type: 'CLEAR' });
-
-      const filterAction = {
-        type: 'FILTER',
-        payload: {
-          visibility: 'all',
-        },
-      };
-
-      dispatch(filterAction);
+      setMyDay({
+        items: [],
+        visibility: 'all',
+      });
     }
   };
 
@@ -32,13 +26,11 @@ export default function ItemController({ dispatch, placeholder, state }) {
     const { innerText: filter } = e.target;
 
     const filterAction = {
-      type: 'FILTER',
-      payload: {
-        visibility: filter,
-      },
+      ...state,
+      visibility: filter,
     };
 
-    dispatch(filterAction);
+    setMyDay(filterAction);
   };
 
   const isAll = visibilityRecognizer(visibility, 'all');
@@ -56,7 +48,7 @@ export default function ItemController({ dispatch, placeholder, state }) {
 }
 
 ItemController.propTypes = {
-  dispatch: propTypes.func.isRequired,
+  setMyDay: propTypes.func.isRequired,
   placeholder: propTypes.string.isRequired,
   state: propTypes.objectOf(propTypes.any),
 };

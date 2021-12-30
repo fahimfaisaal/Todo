@@ -5,7 +5,7 @@ import getCurrentDate from './getCurrentDate';
  * @param {{text: string, createItemCallback: Function}} action
  * @returns array
  */
-const addItem = (items, action) => {
+export const addNewItem = (items, action) => {
   const { text, createItemCallback } = action;
 
   if (text) {
@@ -21,7 +21,7 @@ const addItem = (items, action) => {
  * @param {{id: string, editedItemText: string}} action
  * @returns array
  */
-const editItem = (items, action) => {
+export const editItem = (items, action) => {
   const { id, editedItemText } = action;
   const editedTodo = items.find((todo) => todo.id === id);
   const editedTodoIndex = items.findIndex((todo) => todo.id === id);
@@ -49,14 +49,14 @@ const editItem = (items, action) => {
  * @param {string} id
  * @returns array
  */
-const deleteItem = (items, id) => items.filter((item) => item.id !== id);
+export const deleteItem = (items, id) => items.filter((item) => item.id !== id);
 
 /**
  * @param {array} items
  * @param {string} id
  * @returns array
  */
-const toggleItem = (items, id) => {
+export const toggleItem = (items, id) => {
   const allWithoutDone = items.filter((item) => item.id !== id);
   let doneItem = items.find((item) => item.id === id);
 
@@ -71,66 +71,3 @@ const toggleItem = (items, id) => {
     ? [...allWithoutDone, doneItem]
     : [doneItem, ...allWithoutDone];
 };
-
-const itemsReducer = (state, action) => {
-  const { items } = state;
-
-  switch (action.type) {
-    case 'FETCH': {
-      const fetchItems = action.payload.fetchData;
-      return {
-        ...state,
-        items: fetchItems,
-      };
-    }
-    case 'FILTER': {
-      const { visibility } = action.payload;
-
-      return {
-        ...state,
-        visibility,
-      };
-    }
-    case 'ADD': {
-      const newItems = addItem(items, action.payload);
-
-      return {
-        ...state,
-        items: newItems,
-      };
-    }
-    case 'DELETE': {
-      const withoutDeleted = deleteItem(items, action.payload.id);
-
-      return {
-        ...state,
-        items: withoutDeleted,
-      };
-    }
-    case 'EDIT': {
-      const withEditedItems = editItem(items, action.payload);
-
-      return {
-        ...state,
-        items: withEditedItems,
-      };
-    }
-    case 'TOGGLE': {
-      const withToggleItems = toggleItem(items, action.payload.id);
-
-      return {
-        ...state,
-        items: withToggleItems,
-      };
-    }
-    case 'CLEAR':
-      return {
-        ...state,
-        items: [],
-      };
-    default:
-      return items;
-  }
-};
-
-export default itemsReducer;
