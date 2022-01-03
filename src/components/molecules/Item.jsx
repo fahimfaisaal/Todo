@@ -8,10 +8,11 @@ import ItemLayout from '../atoms/ItemLayout';
 import ItemTitle from '../atoms/ItemTitle';
 import EditInputBox from './EditInputBox';
 
-export default function Item({ item, dispatch }) {
+export default function Item({ item, dispatch, mode }) {
   const [isEdit, setEdit] = useState(false);
+
   const {
-    text, isComplete, id, editedAt,
+    text, isComplete, id, editedAt, status,
   } = item;
 
   const deleteItemHandler = () => {
@@ -19,6 +20,7 @@ export default function Item({ item, dispatch }) {
       type: 'DELETE',
       payload: {
         id,
+        mode,
       },
     };
 
@@ -31,6 +33,7 @@ export default function Item({ item, dispatch }) {
       payload: {
         id,
         editedItemText: editedValue,
+        mode,
       },
     };
 
@@ -47,6 +50,7 @@ export default function Item({ item, dispatch }) {
       type: 'TOGGLE',
       payload: {
         id,
+        mode,
       },
     };
 
@@ -57,8 +61,8 @@ export default function Item({ item, dispatch }) {
     <ItemLayout>
       {!isEdit && (
         <i
-          className="cursor-pointer"
-          onClick={toggleDoneItemHandler}
+          className={!status ? 'cursor-pointer' : ''}
+          onClick={!status && toggleDoneItemHandler}
         >
           {isComplete ? completeCircle : circle}
         </i>
@@ -87,6 +91,10 @@ export default function Item({ item, dispatch }) {
       )}
 
       <i className="cursor-pointer" onClick={deleteItemHandler}>{deleteIcon}</i>
+
+      {status && (
+        <p className="ml-3 text-xs font-salsa dark:text-gray-100">{status}</p>
+      )}
     </ItemLayout>
   );
 }
@@ -94,4 +102,5 @@ export default function Item({ item, dispatch }) {
 Item.propTypes = {
   item: propTypes.objectOf(propTypes.any),
   dispatch: propTypes.func.isRequired,
+  mode: propTypes.string.isRequired,
 };

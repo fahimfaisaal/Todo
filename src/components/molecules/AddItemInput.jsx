@@ -4,7 +4,9 @@ import keyPressHandler from '../../utils/keyPressHandler';
 import ItemLayout from '../atoms/ItemLayout';
 import InputBox from './InputBox';
 
-export default function AddItemInput({ addItem, visibility, dispatch }) {
+export default function AddItemInput({
+  addItem, visibility, dispatch, placeholder,
+}) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
 
@@ -15,11 +17,12 @@ export default function AddItemInput({ addItem, visibility, dispatch }) {
   const submitItem = () => {
     addItem(value);
 
+    // if visibility is done on submit then it'll be switched to due
     if (visibility === 'done') {
       const filterAction = {
         type: 'FILTER',
         payload: {
-          visibility,
+          visibility: 'due',
         },
       };
 
@@ -47,7 +50,7 @@ export default function AddItemInput({ addItem, visibility, dispatch }) {
       <InputBox
         inputRef={todoInputRef}
         classes="input-text"
-        placeholder="add todo"
+        placeholder={`add ${placeholder}`}
         value={value}
         changeHandler={handleChange}
         keyPressHandler={enterKeyPressHandler}
@@ -60,5 +63,6 @@ export default function AddItemInput({ addItem, visibility, dispatch }) {
 AddItemInput.propTypes = {
   addItem: propTypes.func.isRequired,
   visibility: propTypes.string.isRequired,
+  placeholder: propTypes.string.isRequired,
   dispatch: propTypes.func.isRequired,
 };

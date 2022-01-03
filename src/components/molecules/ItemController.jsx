@@ -3,24 +3,30 @@ import propTypes from 'prop-types';
 import Button from '../atoms/Button';
 
 const visibilityRecognizer = (visibilityStatus, status) => (visibilityStatus === status ? ' active-visibility' : '');
-export default function ItemController({ dispatch, placeholder, state }) {
-  const { items, visibility } = state;
-
+export default function ItemController({ dispatch, clearPlaceholder, state }) {
+  const { items, visibility, mode } = state;
+  const listName = null;
   const clearItems = () => {
     let isClear = false;
 
-    if (items.length) {
+    if (items[mode].length) {
       // eslint-disable-next-line no-alert
-      isClear = confirm(`Could you remove all ${placeholder}`);
+      isClear = confirm(`Could you remove all ${clearPlaceholder}`);
     }
 
     if (isClear) {
-      dispatch({ type: 'CLEAR' });
+      dispatch({
+        type: 'CLEAR',
+        payload: {
+          mode,
+        },
+      });
 
       const filterAction = {
         type: 'FILTER',
         payload: {
           visibility: 'all',
+          mode,
         },
       };
 
@@ -35,6 +41,7 @@ export default function ItemController({ dispatch, placeholder, state }) {
       type: 'FILTER',
       payload: {
         visibility: filter,
+        mode,
       },
     };
 
@@ -47,6 +54,7 @@ export default function ItemController({ dispatch, placeholder, state }) {
 
   return (
     <div className="view-layout flex justify-end items-center">
+      {listName && <Button classes="visibility-button mr-auto" innerText={`← back to ${listName}`} />}
       <Button classes={`visibility-button${isAll}`} innerText="all" handler={visibilityHandler} />
       <Button classes={`visibility-button${isDue}`} innerText="due" handler={visibilityHandler} />
       <Button classes={`visibility-button${isDone}`} innerText="done" handler={visibilityHandler} />
@@ -57,6 +65,6 @@ export default function ItemController({ dispatch, placeholder, state }) {
 
 ItemController.propTypes = {
   dispatch: propTypes.func.isRequired,
-  placeholder: propTypes.string.isRequired,
+  clearPlaceholder: propTypes.string.isRequired,
   state: propTypes.objectOf(propTypes.any),
 };

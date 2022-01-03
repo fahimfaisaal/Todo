@@ -4,14 +4,19 @@ import generateStatus from '../../utils/generateStatus';
 import ItemsViewer from '../atoms/ItemsViewer';
 import AddItemInput from './AddItemInput';
 import Item from './Item';
+import ItemController from './ItemController';
 import ViewBoxHeader from './ViewBoxHeader';
 
 export default function ViewBox({
-  subHeading, state, dispatch, createItem,
+  subHeading,
+  state,
+  dispatch,
+  createItem,
+  clearPlaceholder,
 }) {
-  const { items, visibility } = state;
+  const { items, visibility, mode } = state;
 
-  const status = generateStatus(items);
+  const status = generateStatus(items[mode]);
 
   const addItem = (text) => {
     const addAction = {
@@ -19,18 +24,21 @@ export default function ViewBox({
       payload: {
         text,
         createItemCallback: createItem,
+        mode,
       },
     };
 
-    dispatch(addAction);
+    // if text are not empty
+    text && dispatch(addAction);
   };
 
-  const filteredItems = filterItems(items, visibility);
+  const filteredItems = filterItems(items[mode], visibility);
   const itemsToJsx = filteredItems.map((item) => (
     <Item
       key={item.id}
       item={item}
       dispatch={dispatch}
+      mode={mode}
     />
   ));
 
@@ -43,16 +51,23 @@ export default function ViewBox({
             addItem={addItem}
             visibility={visibility}
             dispatch={dispatch}
+            placeholder={mode === 'list' ? 'list' : 'todo'}
           />
           {itemsToJsx}
         </>
       </ItemsViewer>
+      <ItemController
+        state={state}
+        dispatch={dispatch}
+        clearPlaceholder={clearPlaceholder}
+      />
     </div>
   );
 }
 
 ViewBox.propTypes = {
   subHeading: propTypes.string.isRequired,
+  clearPlaceholder: propTypes.string.isRequired,
   state: propTypes.objectOf(propTypes.any),
   dispatch: propTypes.func.isRequired,
   createItem: propTypes.func.isRequired,
