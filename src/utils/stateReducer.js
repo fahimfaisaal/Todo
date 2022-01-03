@@ -1,3 +1,4 @@
+import findItemNIndex from './findItemViaIndex';
 import getCurrentDate from './getCurrentDate';
 
 /**
@@ -18,30 +19,22 @@ const addItem = (items, action) => {
 
 /**
  * @param {array} items
- * @param {{id: string, editedItemText: string}} action
+ * @param {{id: string, editedItemText: string}} payload
  * @returns array
  */
-const editItem = (items, action) => {
-  const { id, editedItemText } = action;
-  const editedTodo = items.find((todo) => todo.id === id);
-  const editedTodoIndex = items.findIndex((todo) => todo.id === id);
+const editItem = (items, { id, editedItemText }) => {
+  const [editedItemIndex, editedItem] = findItemNIndex(items, id);
 
-  const updateTodo = {
-    ...editedTodo,
+  const updateItem = {
+    ...editedItem,
     text: editedItemText,
     editedAt: getCurrentDate(),
   };
 
-  const pushEditedTodo = items.reduce((updatedArr, todo, index) => {
-    if (index !== editedTodoIndex) {
-      updatedArr.push(todo);
-    } else {
-      updatedArr.push(updateTodo);
-    }
-    return updatedArr;
-  }, []);
+  const pushEditedItem = Array.from(items);
+  pushEditedItem[editedItemIndex] = updateItem;
 
-  return pushEditedTodo;
+  return pushEditedItem;
 };
 
 /**
@@ -49,14 +42,15 @@ const editItem = (items, action) => {
  * @param {string} id
  * @returns array
  */
-const deleteItem = (items, id) => items.filter((item) => item.id !== id);
+const deleteItem = (items, { id }) => items.filter((item) => item.id !== id);
 
 /**
  * @param {array} items
  * @param {string} id
  * @returns array
  */
-const toggleItem = (items, id) => {
+const toggleItem = (items, { id }) => {
+  console.log(items);
   const allWithoutDone = items.filter((item) => item.id !== id);
   let doneItem = items.find((item) => item.id === id);
 
@@ -74,17 +68,27 @@ const toggleItem = (items, id) => {
 
 const itemsReducer = (state, action) => {
   const { items } = state;
+  const { type, payload } = action;
+  const payloadMode = payload.mode;
 
-  switch (action.type) {
+  function itemsDataHandler(newData) {
+    console.log(payloadMode);
+    return {
+      ...items,
+      [payloadMode]: newData,
+    };
+  }
+
+  switch (type) {
     case 'FETCH': {
-      const fetchItems = action.payload.fetchData;
+      const fetchItems = payload.fetchData;
       return {
         ...state,
         items: fetchItems,
       };
     }
     case 'FILTER': {
-      const { visibility } = action.payload;
+      const { visibility } = payload;
 
       return {
         ...state,
@@ -92,42 +96,52 @@ const itemsReducer = (state, action) => {
       };
     }
     case 'ADD': {
-      const newItems = addItem(items, action.payload);
+      const addNewItems = addItem(items[payloadMode], payload);
 
       return {
         ...state,
-        items: newItems,
+        items: itemsDataHandler(addNewItems),
       };
     }
     case 'DELETE': {
-      const withoutDeleted = deleteItem(items, action.payload.id);
+      const withoutDeleted = deleteItem(items[payloadMode], payload);
 
       return {
         ...state,
-        items: withoutDeleted,
+        items: itemsDataHandler(withoutDeleted),
       };
     }
     case 'EDIT': {
-      const withEditedItems = editItem(items, action.payload);
+      const withEditedItems = editItem(items[payloadMode], payload);
 
       return {
         ...state,
-        items: withEditedItems,
+        items: itemsDataHandler(withEditedItems),
       };
     }
     case 'TOGGLE': {
-      const withToggleItems = toggleItem(items, action.payload.id);
+      const withToggleItems = toggleItem(items[payloadMode], payload);
 
       return {
         ...state,
-        items: withToggleItems,
+        items: itemsDataHandler(withToggleItems),
       };
     }
-    case 'CLEAR':
+    case 'MODE_SWITCH': {
+      let { mode } = payload;
+      mode = mode === 'myDay' ? 'list' : 'myDay';
+
       return {
         ...state,
-        items: [],
+        mode,
       };
+    }
+    case 'CLEAR': {
+      return {
+        ...state,
+        items: itemsDataHandler([]),
+      };
+    }
     default:
       return items;
   }
