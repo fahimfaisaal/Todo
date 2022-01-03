@@ -1,9 +1,9 @@
+import ItemContainer from './components/template/ItemContainer';
 import Layout from './components/template/Layout';
-import MyDay from './components/template/MyDay';
 
 const App = () => (
   <Layout heading="Todo">
-    <MyDay />
+    <ItemContainer />
   </Layout>
 );
 

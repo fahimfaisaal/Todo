@@ -3,8 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import keyPressHandler from '../../utils/keyPressHandler';
 import ItemLayout from '../atoms/ItemLayout';
 import InputBox from './InputBox';
-// # Clear
-export default function AddItemInput({ addItem, visibility, setVisibility }) {
+
+export default function AddItemInput({
+  addItem, visibility, dispatch, placeholder,
+}) {
   const [value, setValue] = useState('');
   const todoInputRef = useRef(null);
 
@@ -14,7 +16,19 @@ export default function AddItemInput({ addItem, visibility, setVisibility }) {
 
   const submitItem = () => {
     addItem(value);
-    visibility === 'done' && setVisibility('due');
+
+    // if visibility is done on submit then it'll be switched to due
+    if (visibility === 'done') {
+      const filterAction = {
+        type: 'FILTER',
+        payload: {
+          visibility: 'due',
+        },
+      };
+
+      dispatch(filterAction);
+    }
+
     setValue('');
   };
 
@@ -36,7 +50,7 @@ export default function AddItemInput({ addItem, visibility, setVisibility }) {
       <InputBox
         inputRef={todoInputRef}
         classes="input-text"
-        placeholder="add todo"
+        placeholder={`add ${placeholder}`}
         value={value}
         changeHandler={handleChange}
         keyPressHandler={enterKeyPressHandler}
@@ -49,5 +63,6 @@ export default function AddItemInput({ addItem, visibility, setVisibility }) {
 AddItemInput.propTypes = {
   addItem: propTypes.func.isRequired,
   visibility: propTypes.string.isRequired,
-  setVisibility: propTypes.func.isRequired,
+  placeholder: propTypes.string.isRequired,
+  dispatch: propTypes.func.isRequired,
 };

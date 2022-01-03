@@ -8,25 +8,33 @@ import ItemLayout from '../atoms/ItemLayout';
 import ItemTitle from '../atoms/ItemTitle';
 import EditInputBox from './EditInputBox';
 
-export default function Item({ item, dispatch }) {
-  const {
-    text, isComplete, id, editedAt,
-  } = item;
-
+export default function Item({ item, dispatch, mode }) {
   const [isEdit, setEdit] = useState(false);
 
+  const {
+    text, isComplete, id, editedAt, status,
+  } = item;
+
   const deleteItemHandler = () => {
-    dispatch({
+    const deleteAction = {
       type: 'DELETE',
-      id,
-    });
+      payload: {
+        id,
+        mode,
+      },
+    };
+
+    dispatch(deleteAction);
   };
 
   const editItemHandler = (editedValue) => {
     const editAction = {
       type: 'EDIT',
-      id,
-      editedItemText: editedValue,
+      payload: {
+        id,
+        editedItemText: editedValue,
+        mode,
+      },
     };
 
     dispatch(editAction);
@@ -40,7 +48,10 @@ export default function Item({ item, dispatch }) {
   const toggleDoneItemHandler = () => {
     const toggleAction = {
       type: 'TOGGLE',
-      id,
+      payload: {
+        id,
+        mode,
+      },
     };
 
     dispatch(toggleAction);
@@ -50,8 +61,8 @@ export default function Item({ item, dispatch }) {
     <ItemLayout>
       {!isEdit && (
         <i
-          className="cursor-pointer"
-          onClick={toggleDoneItemHandler}
+          className={!status ? 'cursor-pointer' : ''}
+          onClick={!status && toggleDoneItemHandler}
         >
           {isComplete ? completeCircle : circle}
         </i>
@@ -80,6 +91,10 @@ export default function Item({ item, dispatch }) {
       )}
 
       <i className="cursor-pointer" onClick={deleteItemHandler}>{deleteIcon}</i>
+
+      {status && (
+        <p className="ml-3 text-xs font-salsa dark:text-gray-100">{status}</p>
+      )}
     </ItemLayout>
   );
 }
@@ -87,4 +102,5 @@ export default function Item({ item, dispatch }) {
 Item.propTypes = {
   item: propTypes.objectOf(propTypes.any),
   dispatch: propTypes.func.isRequired,
+  mode: propTypes.string.isRequired,
 };

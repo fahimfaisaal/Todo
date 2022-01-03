@@ -6,8 +6,8 @@ export default function Layout({ heading, children }) {
   return (
     <main className="dark:bg-gray-900 bg-gray-100 h-screen">
       <div className="container">
-        <ThemeChanger />
         <Heading text={heading} />
+        <ThemeChanger />
         {children}
       </div>
     </main>

@@ -18,7 +18,7 @@ export default function InputBox({
       />
 
       {clickHandler && (
-      <i className="cursor-pointer" onClick={clickHandler}>{enterKey}</i>
+      <i className="pr-2 cursor-pointer" onClick={clickHandler}>{enterKey}</i>
       )}
     </>
   );
